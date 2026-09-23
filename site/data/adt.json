@@ -1,0 +1,1752 @@
+{
+  "id": "adt",
+  "label": "ADT Messages",
+  "description": "Referral, admission, update, transfer and discharge messages: demographics, diagnoses, allergies, doctor, facility and next of kin.",
+  "version": "7.1",
+  "pdf": "/pdf/adt_spec_v7.1.pdf",
+  "payloadLabel": "ADT_A01 - Patient Admission",
+  "formats": {
+    "json": {
+      "payload": "{\n          \"patient\": {\n                     \"institution\": {\n                                \"id\": \"51134\",\n                                \"name\": \"Example Institution\"\n                     },\n                     \"group\": \"ExampleGroup\",\n                     \"location\": \"LTC\",\n                     \"team\": \"\",\n                     \"pending_date\": \"2026-03-28 13:19:24.37\",\n                     \"admit_date\": \"2026-03-29 13:19:24.37\",\n                     \"location_effective_date\": \"2026-03-29 13:19:24.37\",\n                     \"discharge_date\": null,\n                     \"deceased\": false,\n                     \"patient_id\": \"1234567\",\n                     \"patient_ssn\": \"124-00-0031\",\n                     \"last_name\": \"PatientLastName\",\n                     \"first_name\": \"PatientFirstName\",\n                     \"middle_name\": \"PatientMiddleName\",\n                     \"street_address\": \"512 Elmwood Ave\",\n                     \"address2\": \"\",\n                     \"city\": \"Sharon Hill\",\n                     \"state\": \"PA\",\n                     \"zip\": \"19079\",\n                     \"phone\": \"555-867-5309\",\n                     \"birth_date\": \"1991-05-01\",\n                     \"sex\": \"F\",\n                     \"diagnosis\": [\n                                {\n                                           \"id\": \"131362\",\n                                           \"code\": \"Q22.9\",\n                                           \"description\": \"Congenital malformation of tricuspid valve, unspecified\",\n                                           \"onset_date\": \"2026-04-10\",\n                                           \"resolution_date\": null,\n                                           \"is_primary\": true\n                                },\n                                {\n                                           \"id\": \"131012\",\n                                           \"code\": \"R46.1\",\n                                           \"description\": \"Bizarre personal appearance\",\n                                           \"onset_date\": \"2026-04-10\",\n                                           \"resolution_date\": \"2026-04-16\",\n                                           \"is_primary\": false\n                                }\n                     ],\n                     \"allergy\": [\n                                {\n                                           \"id\": \"123\",\n                                           \"code\": \"00591034701\",\n                                           \"code_type\": \"ndc\",\n                                           \"description\": \"hydroCHLOROthiazide\",\n                                           \"onset_date\": \"2025-08-08\",\n                                           \"resolution_date\": null\n                                }\n                     ],\n                     \"contact\": [\n                                {\n                                           \"id\": \"12\",\n                                           \"relationship\": \"Spouse\",\n                                           \"last_name\": \"ExampleLastName\",\n                                           \"first_name\": \"ExampleFirstName\",\n                                           \"street_address\": \"512 Elmwood Ave\",\n                                           \"address2\": \"\",\n                                           \"city\": \"Sharon Hill\",\n                                           \"state\": \"PA\",\n                                           \"zip\": \"19079\",\n                                           \"phone\": \"555-867-5309\"\n                                }\n                     ],\n                     \"doctor\": {\n                                \"last_name\": \"ProviderLastName\",\n                                \"first_name\": \"ProviderFirstName\",\n                                \"npi\": \"1164000371\",\n                                \"dea\": \"12345\"\n                     },\n                     \"facility\": {\n                                \"id\": \"1238248896\",\n                                \"name\": \"Example Facility Name\",\n                                \"street_address\": \"512 Elmwood Ave\",\n                                \"address2\": \"\",\n                                \"city\": \"Sharon Hill\",\n                                \"state\": \"PA\",\n                                \"zip\": \"19079\",\n                                \"phone\": \"555-867-5309\"\n                     }\n          }\n}",
+      "sections": [
+        {
+          "id": "message-envelope",
+          "title": "Message envelope",
+          "subtitle": "patient object",
+          "fields": [
+            {
+              "field": "patient",
+              "description": "Encapsulating field",
+              "type": "--",
+              "req": "R",
+              "notes": ""
+            }
+          ]
+        },
+        {
+          "id": "organization--coverage",
+          "title": "Organization / Coverage",
+          "subtitle": "institution, coverage",
+          "fields": [
+            {
+              "field": "institution.name",
+              "description": "Name of the hospice/branch",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "institution.id",
+              "description": "Hospice ID assigned by Dragonfly Health",
+              "type": "integer",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "location",
+              "description": "Hospice location / care setting type: Home | ALF | LTC | IPU",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "group",
+              "description": "Hospice group name or ID assigned by Dragonfly Health",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "team_name",
+              "description": "Hospice team name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "location_effective_date",
+              "description": "Location effective date - this is used as the transfer date",
+              "type": "dateTime",
+              "req": "R",
+              "notes": "Dragonfly Health utilizes a date-based billing cycle rather than time-specific increments."
+            },
+            {
+              "field": "pending_date (referrals) or admit_date (admitted patients)",
+              "description": "Patient coverage start date",
+              "type": "dateTime",
+              "req": "R",
+              "notes": "Expected to remain static for the duration of the patient episode (admit to discharge). Date-based billing cycle."
+            },
+            {
+              "field": "discharge_date",
+              "description": "Patient coverage stop date",
+              "type": "dateTime",
+              "req": "R*",
+              "notes": "Only required in a discharge message. Date-based billing cycle."
+            },
+            {
+              "field": "deceased",
+              "description": "Patient deceased indicator: TRUE = deceased, FALSE = live discharge",
+              "type": "boolean",
+              "req": "R*",
+              "notes": "Only required in a discharge message."
+            }
+          ]
+        },
+        {
+          "id": "patient",
+          "title": "Patient",
+          "subtitle": "patient object",
+          "fields": [
+            {
+              "field": "patient_id",
+              "description": "Patient MRN",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "patient_ssn",
+              "description": "Patient SSN",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "last_name",
+              "description": "Patient last name",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "first_name",
+              "description": "Patient first name",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "middle_name",
+              "description": "Patient middle name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "street_address",
+              "description": "Street address of the patient",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "address2",
+              "description": "Second line of the street address of the patient",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "city",
+              "description": "Patient city",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "state",
+              "description": "Patient state",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "zip",
+              "description": "Patient zip code",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "phone",
+              "description": "Patient home phone number",
+              "type": "string",
+              "req": "R",
+              "notes": "Must NOT contain parenthesis, spaces or dashes (e.g. 1112223333). If no phone number is received Dragonfly Health will use the hospice phone number."
+            },
+            {
+              "field": "birth_date",
+              "description": "Patient date of birth",
+              "type": "date (YYYYMMDD)",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "sex",
+              "description": "Patient gender: M = male, F = female, U = unknown | other",
+              "type": "string",
+              "req": "R",
+              "notes": "FHIR JSON requires the full word, all lowercase."
+            }
+          ]
+        },
+        {
+          "id": "diagnoses-repeatable",
+          "title": "Diagnoses (repeatable)",
+          "subtitle": "diagnosis[] array",
+          "fields": [
+            {
+              "field": "diagnosis.code",
+              "description": "Diagnosis ICD10 code",
+              "type": "string",
+              "req": "P",
+              "notes": "Diagnoses are NOT required in any ADT message, but medications cannot be dispensed without an ICD10 present."
+            },
+            {
+              "field": "diagnosis.description",
+              "description": "Description of the diagnosis",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "diagnosis.onset_date",
+              "description": "Onset date of the diagnosis",
+              "type": "dateTime",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "diagnosis.resolution_date",
+              "description": "Resolution date of the diagnosis",
+              "type": "dateTime",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "diagnosis.is_primary",
+              "description": "Primary diagnosis code indicator",
+              "type": "boolean",
+              "req": "R*",
+              "notes": "Required if an ICD10 is sent. If no primary indicator is sent for any diagnosis, Dragonfly Health defaults the first diagnosis in the message to primary."
+            }
+          ]
+        },
+        {
+          "id": "allergies-repeatable",
+          "title": "Allergies (repeatable)",
+          "subtitle": "allergy[] array",
+          "fields": [
+            {
+              "field": "allergy.code",
+              "description": "Code that identifies the allergy or intolerance",
+              "type": "string",
+              "req": "O",
+              "notes": "If no allergies are sent the entire container can be omitted. Allergies are NOT required in any ADT message, but medications cannot be dispensed without an allergy or NKA present."
+            },
+            {
+              "field": "allergy.description",
+              "description": "Allergy name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "allergy.code_type",
+              "description": "Allergy code type: Ndc | Gcn | Gpi | RxCui | Text | GcnSeqNo",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "allergy.onset_date",
+              "description": "When the allergy or intolerance was identified",
+              "type": "dateTime",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "allergy.resolution_date",
+              "description": "The resolution date of the allergy",
+              "type": "dateTime",
+              "req": "O",
+              "notes": ""
+            }
+          ]
+        },
+        {
+          "id": "primary-doctor",
+          "title": "Primary doctor",
+          "subtitle": "doctor object",
+          "fields": [
+            {
+              "field": "doctor.last_name",
+              "description": "Last name of the primary doctor",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "doctor.first_name",
+              "description": "First name of the primary doctor",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "doctor.dea",
+              "description": "DEA number of the primary doctor",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "doctor.npi",
+              "description": "NPI license number code for the primary doctor",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            }
+          ]
+        },
+        {
+          "id": "facility-if-applicable",
+          "title": "Facility (if applicable)",
+          "subtitle": "facility object",
+          "fields": [
+            {
+              "field": "facility.id",
+              "description": "EMR vendor internal LTC facility ID",
+              "type": "string",
+              "req": "R*",
+              "notes": "Required for LTC/ALF pharmacy patients."
+            },
+            {
+              "field": "facility.name",
+              "description": "Name of the LTC facility",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "facility.phone",
+              "description": "Patient's LTC facility phone number",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "facility.street_address",
+              "description": "Patient's LTC facility address line 1",
+              "type": "string",
+              "req": "R*",
+              "notes": "Required for LTC/ALF pharmacy patients."
+            },
+            {
+              "field": "facility.address2",
+              "description": "Patient's LTC facility address line 2",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "facility.city",
+              "description": "Patient's LTC facility city",
+              "type": "string",
+              "req": "R*",
+              "notes": "Required for LTC/ALF pharmacy patients."
+            },
+            {
+              "field": "facility.state",
+              "description": "Patient's LTC facility state",
+              "type": "string",
+              "req": "R*",
+              "notes": "Required for LTC/ALF pharmacy patients."
+            },
+            {
+              "field": "facility.zip",
+              "description": "Patient's LTC facility postal code",
+              "type": "string",
+              "req": "R*",
+              "notes": "Required for LTC/ALF pharmacy patients."
+            }
+          ]
+        },
+        {
+          "id": "next-of-kin--contacts-repeatable",
+          "title": "Next of kin / contacts (repeatable)",
+          "subtitle": "contact[] array",
+          "fields": [
+            {
+              "field": "contact.last_name",
+              "description": "Next of kin last name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "contact.first_name",
+              "description": "Next of kin first name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "contact.middle_name",
+              "description": "Next of kin middle name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "contact.relationship",
+              "description": "Next of kin relationship",
+              "type": "string",
+              "req": "O",
+              "notes": "Preferred values: Caregiver, Child, Immediate Family, Parent, Spouse, Self, Other, Unknown."
+            },
+            {
+              "field": "contact.street_address",
+              "description": "Next of kin address line 1",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "contact.address2",
+              "description": "Next of kin address line 2",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "contact.city",
+              "description": "Next of kin city",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "contact.state",
+              "description": "Next of kin state",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "contact.zip",
+              "description": "Next of kin zip",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "contact.phone",
+              "description": "Next of kin phone",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            }
+          ]
+        }
+      ]
+    },
+    "xml": {
+      "payload": "<ADT>\n          <Record>\n                     <RecIdentifier>544926:1820725</RecIdentifier>\n                     <RecType>10</RecType>\n                     <HospiceID>12345</HospiceID>\n          </Record>\n          <Patient>\n                     <PatSSN>123456789</PatSSN>\n                     <PatLastName>PatientLastName</PatLastName>\n                     <PatFirstName>PatientFirstName</PatFirstName>\n                     <PatMiddleName/>\n                     <PatAddress1>512 Elmwood Ave</PatAddress1>\n                     <PatAddress2/>\n                     <PatCity>Sharon Hill</PatCity>\n                     <PatState>PA</PatState>\n                     <PatZip>19079</PatZip>\n                     <PatHomePhone>(584) 202-1671</PatHomePhone>\n                     <PatBirthDate>04/21/1931</PatBirthDate>\n                     <PatGender>F</PatGender>\n                     <PatEthnCode/>\n                     <PatHeight/>\n                     <PatWeight/>\n                     <PatMarStatus/>\n                     <PatID>123456</PatID>\n          </Patient>\n          <Hospice>\n                     <HospName>Example Hospice</HospName>\n                     <HospGroupID/>\n                     <HospLocType>Home</HospLocType>\n                     <HospTeamName>TeamA</HospTeamName>\n                     <HospLocEffDate>03/24/2026</HospLocEffDate>\n          </Hospice>\n          <Coverage>\n                     <CovStartDate>03/24/2026</CovStartDate>\n                     <CovStopDate/>\n          </Coverage>\n          <Diagnosis>\n                     <DiagICD10>Q22.9</DiagICD10>\n                     <ICD10Description/>\n                     <DiagOnsetDate/>\n                     <DiagResDate/>\n                     <DiagPrimary/>\n          </Diagnosis>\n          <Allergies>\n                     <Allergy>\n                                <Description>No Known Drug Allergy</Description>\n                                <Code>0000007055</Code>\n                                <OnsetDate>04/20/2026</OnsetDate>\n                                <ResDate/>\n                     </Allergy>\n          </Allergies>\n          <Doctor>\n                     <DrLastName>PhysicianLastName</DrLastName>\n                     <DrFirstName>PhysicianFirstName</DrFirstName>\n                     <DrDEA/>\n                     <DrNPI/>\n                     <DrAddress1>350 Isaacs Lane</DrAddress1>\n                     <DrAddress2/>\n                     <DrCity>Richmond</DrCity>\n                     <DrState>KY</DrState>\n                     <DrZip>40475</DrZip>\n                     <DrZip4/>\n                     <DrOfficePhone>(859) 626-9292</DrOfficePhone>\n                     <DrOfficeFax>(859) 626-9272</DrOfficeFax>\n          </Doctor>\n          <Facility>\n                     <FacilityId>123456</FacilityId>\n                     <FacilityName>Example Facility Name</FacilityName>\n                     <FacilityAddress1>350 Isaacs Lane</FacilityAddress1>\n                     <FacilityAddress2/>\n                     <FacilityCity>Richmond</FacilityCity>\n                     <FacilityState>KY</FacilityState>\n                     <FacilityZip>40475</FacilityZip>\n                     <FacilityZip4>2824</FacilityZip4>\n                     <FacilityPhone>(859) 626-9292</FacilityPhone>\n                     <FacilityFax/>\n          </Facility>\n</ADT>",
+      "sections": [
+        {
+          "id": "message-envelope",
+          "title": "Message envelope",
+          "subtitle": "<ADT>",
+          "fields": [
+            {
+              "field": "ADT",
+              "description": "Encapsulating field",
+              "type": "--",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "RecType",
+              "description": "ADT request message type",
+              "type": "integer",
+              "req": "R*",
+              "notes": "Not required for JSON. See the message type reference table in section 6.2 of the PDF."
+            }
+          ]
+        },
+        {
+          "id": "organization--coverage",
+          "title": "Organization / Coverage",
+          "subtitle": "<Hospice>, <Coverage>",
+          "fields": [
+            {
+              "field": "Hospice/HospiceName",
+              "description": "Name of the hospice/branch",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Hospice/HospOrgCode",
+              "description": "Hospice ID assigned by Dragonfly Health",
+              "type": "integer",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Hospice/HospLocType",
+              "description": "Hospice location / care setting type: Home | ALF | LTC | IPU",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Hospice/HospGroupID",
+              "description": "Hospice group name or ID assigned by Dragonfly Health",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Hospice/HospTeamName",
+              "description": "Hospice team name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Hospice/HospLocEffDate",
+              "description": "Location effective date - this is used as the transfer date",
+              "type": "dateTime",
+              "req": "R",
+              "notes": "Dragonfly Health utilizes a date-based billing cycle rather than time-specific increments."
+            },
+            {
+              "field": "Coverage/CovStartDate",
+              "description": "Patient coverage start date",
+              "type": "dateTime",
+              "req": "R",
+              "notes": "Expected to remain static for the duration of the patient episode (admit to discharge). Date-based billing cycle."
+            },
+            {
+              "field": "Coverage/CovStopDate",
+              "description": "Patient coverage stop date",
+              "type": "dateTime",
+              "req": "R*",
+              "notes": "Only required in a discharge message. Date-based billing cycle."
+            },
+            {
+              "field": "RecType 18 = live discharge, 19 = deceased",
+              "description": "Patient deceased indicator: TRUE = deceased, FALSE = live discharge",
+              "type": "based on RecType",
+              "req": "R*",
+              "notes": "Only required in a discharge message."
+            }
+          ]
+        },
+        {
+          "id": "patient",
+          "title": "Patient",
+          "subtitle": "<Patient>",
+          "fields": [
+            {
+              "field": "Patient/PatID",
+              "description": "Patient MRN",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Patient/PatSSN",
+              "description": "Patient SSN",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Patient/PatLastName",
+              "description": "Patient last name",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Patient/PatFirstName",
+              "description": "Patient first name",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Patient/PatMiddleName",
+              "description": "Patient middle name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Patient/PatAddress1",
+              "description": "Street address of the patient",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Patient/PatAddress2",
+              "description": "Second line of the street address of the patient",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Patient/PatCity",
+              "description": "Patient city",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Patient/PatState",
+              "description": "Patient state",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Patient/PatZip",
+              "description": "Patient zip code",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Patient/PatHomePhone",
+              "description": "Patient home phone number",
+              "type": "string",
+              "req": "R",
+              "notes": "Must NOT contain parenthesis, spaces or dashes (e.g. 1112223333). If no phone number is received Dragonfly Health will use the hospice phone number."
+            },
+            {
+              "field": "Patient/PatBirthDate",
+              "description": "Patient date of birth",
+              "type": "date (YYYYMMDD)",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Patient/PatGender",
+              "description": "Patient gender: M = male, F = female, U = unknown | other",
+              "type": "string",
+              "req": "R",
+              "notes": "FHIR JSON requires the full word, all lowercase."
+            }
+          ]
+        },
+        {
+          "id": "diagnoses-repeatable",
+          "title": "Diagnoses (repeatable)",
+          "subtitle": "<Diagnosis>",
+          "fields": [
+            {
+              "field": "Diagnosis/DiagICD10",
+              "description": "Diagnosis ICD10 code",
+              "type": "string",
+              "req": "P",
+              "notes": "Diagnoses are NOT required in any ADT message, but medications cannot be dispensed without an ICD10 present."
+            },
+            {
+              "field": "Diagnosis/DiagDescription",
+              "description": "Description of the diagnosis",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Diagnosis/DiagOnsetDate",
+              "description": "Onset date of the diagnosis",
+              "type": "dateTime",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Diagnosis/DiagResDate",
+              "description": "Resolution date of the diagnosis",
+              "type": "dateTime",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Diagnosis/DiagPrimary",
+              "description": "Primary diagnosis code indicator",
+              "type": "int",
+              "req": "R*",
+              "notes": "Required if an ICD10 is sent. If no primary indicator is sent for any diagnosis, Dragonfly Health defaults the first diagnosis in the message to primary."
+            }
+          ]
+        },
+        {
+          "id": "allergies-repeatable",
+          "title": "Allergies (repeatable)",
+          "subtitle": "<Allergies><Allergy>",
+          "fields": [
+            {
+              "field": "Allergies/Allergy/Code",
+              "description": "Code that identifies the allergy or intolerance",
+              "type": "string",
+              "req": "O",
+              "notes": "If no allergies are sent the entire container can be omitted. Allergies are NOT required in any ADT message, but medications cannot be dispensed without an allergy or NKA present."
+            },
+            {
+              "field": "Allergies/Allergy/Description",
+              "description": "Allergy name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Allergies/Allergy/Class",
+              "description": "Allergy category: Food | Medication | Environment | Biologic",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Allergies/Allergy/CodeType",
+              "description": "Allergy code type: Ndc | Gcn | Gpi | RxCui | Text | GcnSeqNo",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Allergies/Allergy/OnsetDate",
+              "description": "When the allergy or intolerance was identified",
+              "type": "dateTime",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Allergies/Allergy/ResDate",
+              "description": "The resolution date of the allergy",
+              "type": "dateTime",
+              "req": "O",
+              "notes": ""
+            }
+          ]
+        },
+        {
+          "id": "primary-doctor",
+          "title": "Primary doctor",
+          "subtitle": "<Doctor>",
+          "fields": [
+            {
+              "field": "Doctor/DrLastName",
+              "description": "Last name of the primary doctor",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Doctor/DrFirstName",
+              "description": "First name of the primary doctor",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Doctor/DrDEA",
+              "description": "DEA number of the primary doctor",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Doctor/DrNPI",
+              "description": "NPI license number code for the primary doctor",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            }
+          ]
+        },
+        {
+          "id": "facility-if-applicable",
+          "title": "Facility (if applicable)",
+          "subtitle": "<Facility>",
+          "fields": [
+            {
+              "field": "Facility/FacilityID",
+              "description": "EMR vendor internal LTC facility ID",
+              "type": "string",
+              "req": "R*",
+              "notes": "Required for LTC/ALF pharmacy patients."
+            },
+            {
+              "field": "Facility/FacilityName",
+              "description": "Name of the LTC facility",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Facility/FaciliityPhone",
+              "description": "Patient's LTC facility phone number",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Facility/FacilityAddress1",
+              "description": "Patient's LTC facility address line 1",
+              "type": "string",
+              "req": "R*",
+              "notes": "Required for LTC/ALF pharmacy patients."
+            },
+            {
+              "field": "Facility/FacilityAddress2",
+              "description": "Patient's LTC facility address line 2",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Facility/FacilityCity",
+              "description": "Patient's LTC facility city",
+              "type": "string",
+              "req": "R*",
+              "notes": "Required for LTC/ALF pharmacy patients."
+            },
+            {
+              "field": "Facility/FacilityState",
+              "description": "Patient's LTC facility state",
+              "type": "string",
+              "req": "R*",
+              "notes": "Required for LTC/ALF pharmacy patients."
+            },
+            {
+              "field": "Facility/FacilityZip",
+              "description": "Patient's LTC facility postal code",
+              "type": "string",
+              "req": "R*",
+              "notes": "Required for LTC/ALF pharmacy patients."
+            }
+          ]
+        },
+        {
+          "id": "next-of-kin--contacts-repeatable",
+          "title": "Next of kin / contacts (repeatable)",
+          "subtitle": "<Contact>",
+          "fields": [
+            {
+              "field": "Contact/ContactLastName",
+              "description": "Next of kin last name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Contact/ContactFirstName",
+              "description": "Next of kin first name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Contact/ContactMiddleName",
+              "description": "Next of kin middle name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Contact/Relationship",
+              "description": "Next of kin relationship",
+              "type": "string",
+              "req": "O",
+              "notes": "Preferred values: Caregiver, Child, Immediate Family, Parent, Spouse, Self, Other, Unknown."
+            },
+            {
+              "field": "Contact/ContactAddress1",
+              "description": "Next of kin address line 1",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Contact/ContactAddress2",
+              "description": "Next of kin address line 2",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Contact/ContactCity",
+              "description": "Next of kin city",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Contact/ContactState",
+              "description": "Next of kin state",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Contact/ContactZip",
+              "description": "Next of kin zip",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Contact/ContactPhone",
+              "description": "Next of kin phone",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            }
+          ]
+        }
+      ]
+    },
+    "hl7": {
+      "payload": "MSH|^~\\&|SendingApplication|1234|DragonflyHealth|DragonflyHealth||||ADT^A01|199||P|2.5\nEVN|A01|20260324\nPID|||123456^MRN||PatientLastName^PatientFirstName||19520329|F|||512 Elmwood Ave^^Sharon Hill^PA^19079||(215)937-5500||||||364000111|||||||||||\nPV1||O|R^^^^^Home^^^|Home|||1374433555^JONES^TINA|1376633248^JONES^TINA||||||||||Home|||||||||||||||||||||Identifier|||||20260324||\nNK1|1|NextOfKinLastName^NextOfKinFirstName|E^NextOfKinRelationship512 Elmwood Ave^^Sharon Hill^PA^19079|(262)370-1472\nOBX|1|ST|Height(in)||68\nOBX|2|ST|Weight(lb)||141\nAL1|1||^erythromycin|||20260408183116\nAL1|2||^penicillins|||20260408183116\nDG1|1|ICD10|C53.8^Malignant neoplasm of overlapping sites of cervix uteri^ICD10||20260424|A|||||||||1",
+      "sections": [
+        {
+          "id": "message-envelope",
+          "title": "Message envelope",
+          "subtitle": "MSH segment",
+          "fields": [
+            {
+              "field": "MSH.9.2",
+              "description": "ADT request message type",
+              "type": "string",
+              "req": "R*",
+              "notes": "Not required for JSON. See the message type reference table in section 6.2 of the PDF."
+            }
+          ]
+        },
+        {
+          "id": "organization--coverage",
+          "title": "Organization / Coverage",
+          "subtitle": "MSH, PV1, EVN",
+          "fields": [
+            {
+              "field": "PV1.3",
+              "description": "Name of the hospice/branch",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "MSH.4",
+              "description": "Hospice ID assigned by Dragonfly Health",
+              "type": "integer",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "PV1.4",
+              "description": "Hospice location / care setting type: Home | ALF | LTC | IPU",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "PV1.10",
+              "description": "Hospice team name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "EVN.2",
+              "description": "Location effective date - this is used as the transfer date",
+              "type": "dateTime",
+              "req": "R",
+              "notes": "Dragonfly Health utilizes a date-based billing cycle rather than time-specific increments."
+            },
+            {
+              "field": "PV1.44",
+              "description": "Patient coverage start date",
+              "type": "dateTime",
+              "req": "R",
+              "notes": "Expected to remain static for the duration of the patient episode (admit to discharge). Date-based billing cycle."
+            },
+            {
+              "field": "PV1.45",
+              "description": "Patient coverage stop date",
+              "type": "dateTime",
+              "req": "R*",
+              "notes": "Only required in a discharge message. Date-based billing cycle."
+            },
+            {
+              "field": "PID.30",
+              "description": "Patient deceased indicator: TRUE = deceased, FALSE = live discharge",
+              "type": "char(1) - Y or N",
+              "req": "R*",
+              "notes": "Only required in a discharge message."
+            }
+          ]
+        },
+        {
+          "id": "patient",
+          "title": "Patient",
+          "subtitle": "PID segment",
+          "fields": [
+            {
+              "field": "PID.3.1",
+              "description": "Patient MRN",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "PID.19",
+              "description": "Patient SSN",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "PID.5.1",
+              "description": "Patient last name",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "PID.5.2",
+              "description": "Patient first name",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "PID.5.3",
+              "description": "Patient middle name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "PID.11.1",
+              "description": "Street address of the patient",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "PID.11.2",
+              "description": "Second line of the street address of the patient",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "PID.11.3",
+              "description": "Patient city",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "PID.11.4",
+              "description": "Patient state",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "PID.11.5",
+              "description": "Patient zip code",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "PID.13",
+              "description": "Patient home phone number",
+              "type": "string",
+              "req": "R",
+              "notes": "Must NOT contain parenthesis, spaces or dashes (e.g. 1112223333). If no phone number is received Dragonfly Health will use the hospice phone number."
+            },
+            {
+              "field": "PID.5",
+              "description": "Patient date of birth",
+              "type": "date (YYYYMMDD)",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "PID.8",
+              "description": "Patient gender: M = male, F = female, U = unknown | other",
+              "type": "string",
+              "req": "R",
+              "notes": "FHIR JSON requires the full word, all lowercase."
+            }
+          ]
+        },
+        {
+          "id": "diagnoses-repeatable",
+          "title": "Diagnoses (repeatable)",
+          "subtitle": "DG1 segment",
+          "fields": [
+            {
+              "field": "DG1.3.1",
+              "description": "Diagnosis ICD10 code",
+              "type": "string",
+              "req": "P",
+              "notes": "Diagnoses are NOT required in any ADT message, but medications cannot be dispensed without an ICD10 present."
+            },
+            {
+              "field": "DG1.3.2",
+              "description": "Description of the diagnosis",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "DG1.5",
+              "description": "Onset date of the diagnosis",
+              "type": "dateTime",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "DG1.15",
+              "description": "Primary diagnosis code indicator",
+              "type": "int",
+              "req": "R*",
+              "notes": "Required if an ICD10 is sent. If no primary indicator is sent for any diagnosis, Dragonfly Health defaults the first diagnosis in the message to primary."
+            }
+          ]
+        },
+        {
+          "id": "allergies-repeatable",
+          "title": "Allergies (repeatable)",
+          "subtitle": "AL1 segment",
+          "fields": [
+            {
+              "field": "AL1.2",
+              "description": "Code that identifies the allergy or intolerance",
+              "type": "string",
+              "req": "O",
+              "notes": "If no allergies are sent the entire container can be omitted. Allergies are NOT required in any ADT message, but medications cannot be dispensed without an allergy or NKA present."
+            },
+            {
+              "field": "AL1.3",
+              "description": "Allergy name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "AL1.6",
+              "description": "When the allergy or intolerance was identified",
+              "type": "dateTime",
+              "req": "O",
+              "notes": ""
+            }
+          ]
+        },
+        {
+          "id": "primary-doctor",
+          "title": "Primary doctor",
+          "subtitle": "PV1 segment",
+          "fields": [
+            {
+              "field": "PV1.7.2",
+              "description": "Last name of the primary doctor",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "PV1.7.3",
+              "description": "First name of the primary doctor",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "PV1.7",
+              "description": "NPI license number code for the primary doctor",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            }
+          ]
+        },
+        {
+          "id": "facility-if-applicable",
+          "title": "Facility (if applicable)",
+          "subtitle": "PID segment",
+          "fields": [
+            {
+              "field": "PID.11.23",
+              "description": "EMR vendor internal LTC facility ID",
+              "type": "string",
+              "req": "R*",
+              "notes": "Required for LTC/ALF pharmacy patients."
+            }
+          ]
+        },
+        {
+          "id": "next-of-kin--contacts-repeatable",
+          "title": "Next of kin / contacts (repeatable)",
+          "subtitle": "NK1 segment",
+          "fields": [
+            {
+              "field": "NK1.2.1",
+              "description": "Next of kin last name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "NK1.2.2",
+              "description": "Next of kin first name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "NK1.2.3",
+              "description": "Next of kin middle name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "NK1.3.2",
+              "description": "Next of kin relationship",
+              "type": "string",
+              "req": "O",
+              "notes": "Preferred values: Caregiver, Child, Immediate Family, Parent, Spouse, Self, Other, Unknown."
+            },
+            {
+              "field": "NK1.4.1",
+              "description": "Next of kin address line 1",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "NK1.4.2",
+              "description": "Next of kin address line 2",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "NK1.4.3",
+              "description": "Next of kin city",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "NK1.4.4",
+              "description": "Next of kin state",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "NK1.4.5",
+              "description": "Next of kin zip",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "NK1.5.1",
+              "description": "Next of kin phone",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            }
+          ]
+        }
+      ]
+    },
+    "fhir": {
+      "payload": "{\n          \"resourceType\": \"EpisodeOfCare\",\n          \"id\": \"example-episode\",\n          \"contained\": [\n                     {\n                                \"resourceType\": \"Organization\",\n                                \"id\": \"example-organization\",\n                                \"identifier\": [\n                                           {\n                                                      \"system\":\n\"https://dragonflyhealth.com/identifier/organization-id\",\n                                                      \"value\": \"49414\"\n                                           }\n                                ],\n                                \"name\": \"Example Hospice Name\"\n                     },\n                     {\n                                \"resourceType\": \"CareTeam\",\n                                \"id\": \"example-careTeam\",\n                                \"name\": \"Dream 1\",\n                                \"period\": {\n                                           \"start\": \"2026-03-31T06:49:00.277Z\"\n                                }\n                     },\n                     {\n                                \"resourceType\": \"Patient\",\n                                \"id\": \"example-patient\",\n                                \"identifier\": [\n                                           {\n                                                      \"system\": \"https://exampleVendor.com/identifier/mrn\",\n                                                      \"value\": \"629360331\"\n                                           },\n                                           {\n                                                      \"system\": \"http://hl7.org/fhir/sid/us-ssn\",\n                                                      \"value\": \"123456789\"\n                                           }\n                                ],\n                                \"name\": [\n                                           {\n                                                      \"use\": \"official\",\n                                                      \"family\": \"ExampleLastName\",\n                                                      \"given\": [\n                                                                 \"ExampleFirstName\",\n                                                                 \"ExampleMiddleName\"\n                                                      ]\n                                           }\n                                ],\n                                \"gender\": \"male\",\n                                \"birthDate\": \"1963-08-18\",\n                                \"address\": [\n                                           {\n                                                      \"use\": \"home\",\n                                                      \"type\": \"both\",\n                                                      \"line\": [\n                                                                 \"2233 TEST Tree Forest Circle\"\n                                                      ],\n                                                      \"city\": \"Dallas\",\n                                                      \"state\": \"TX\",\n                                                      \"postalCode\": \"75248\",\n                                                      \"country\": \"USA\"\n                                           }\n                                ],\n                                \"telecom\": [\n                                           {\n                                                      \"system\": \"phone\",\n                                                      \"value\": \"(372)-410-3584\",\n                                                      \"use\": \"home\",\n                                                      \"rank\": 1\n                                           }\n                                ],\n                                \"contact\": [\n                                           {\n                                                      \"relationship\": [\n                                                                 {\n                                                                            \"coding\": [\n                                                                                       {\n                                                                                                  \"system\":\n\"http://terminology.hl7.org/CodeSystem/v2-0131\",\n                                                                                                  \"code\": \"S\"\n                                                                                       }\n                                                                            ],\n                                                                            \"text\": \"Spouse\"\n                                                                 }\n                                                      ],\n                                                      \"name\": {\n                                                                 \"family\": \"ExampleContactLastName\",\n                                                                 \"given\": [\n                                                                            \"ExampleContactFirstName\"\n                                                                 ]\n                                                      },\n                                                      \"telecom\": [\n                                                                 {\n                                                                            \"system\": \"phone\",\n                                                                            \"value\": \"555-555-5555\"\n                                                                 }\n                                                      ],\n                                \"address\": {\n                                           \"line\": [\n                                                      \"2233 TEST Tree Forest Circle\"\n                                           ],\n                                           \"city\": \"Dallas\",\n                                           \"state\": \"TX\",\n                                           \"postalCode\": \"75248\"\n                                }\n                     }\n          ]\n},\n{\n          \"resourceType\": \"Practitioner\",\n          \"id\": \"example-practitioner\",\n          \"active\": true,\n          \"identifier\": [\n                     {\n                                \"system\": \"http://hl7.org/fhir/sid/us-npi\",\n                                \"value\": \"3235655611\"\n                     },\n                     {\n                                \"system\": \"http://hl7.org/fhir/sid/us-dea\",\n                                \"value\": \"123456\"\n                     }\n          ],\n          \"name\": [\n                     {\n                                \"use\": \"official\",\n                                \"family\": \"SampleMDLastName\",\n                                \"given\": [\n                                           \"SampleMDFirstName\"\n                                ]\n                     }\n          ]\n},\n{\n          \"resourceType\": \"AllergyIntolerance\",\n          \"id\": \"example-allergy\",\n          \"type\": \"allergy\",\n          \"category\": [\n                     \"environment\"\n          ],\n          \"code\": {\n                     \"coding\": [\n                                {\n                                           \"system\": \"http://snomed.info/sct\",\n                                           \"code\": \"300916003\",\n                                           \"display\": \"Latex\"\n                                }\n                     ],\n                     \"text\": \"Latex\"\n          },\n          \"onsetDateTime\": \"2021-03-24T06:49:00.277Z\",\n          \"subject\": {\n                     \"reference\": \"#example-patient\"\n          }\n},\n{\n          \"resourceType\": \"Condition\",\n                                \"id\": \"example-condition\",\n                                \"code\": {\n                                           \"coding\": [\n                                                      {\n                                                                 \"system\": \"http://hl7.org/fhir/sid/icd-10-cm\",\n                                                                 \"code\": \"G12.21\"\n                                                      }\n                                           ],\n                                           \"text\": \"Amyotrophic Lateral Sclerosis\"\n                                },\n                                \"onsetDateTime\": \"2021-02-04T00:00:00-06:00\",\n                                \"subject\": {\n                                           \"reference\": \"#example-patient\"\n                                }\n                     },\n                     {\n                                \"resourceType\": \"Location\",\n                                \"id\": \"example-facility\",\n                                \"identifier\": [\n                                           {\n                                                      \"system\":\n\"https://exampleVendor.com/identifier/facilityId\",\n                                                      \"value\": \"FAC111048\"\n                                           }\n                                ],\n                                \"name\": \"Example Facility\",\n                                \"telecom\": [\n                                           {\n                                                      \"use\": \"work\",\n                                                      \"value\": \"2705295555\",\n                                                      \"system\": \"phone\"\n                                           }\n                                ],\n                                \"address\": {\n                                           \"use\": \"office\",\n                                           \"line\": [\n                                                      \"460 S College St\"\n                                           ],\n                                           \"state\": \"KY\",\n                                           \"postalCode\": \"42170-9738\",\n                                           \"city\": \"Woodburn\"\n                                }\n                     }\n          ],\n          \"status\": \"active\",\n          \"diagnosis\": [\n                     {\n                                \"condition\": {\n                                           \"reference\": \"#example-condition\"\n                                },\n                                \"rank\": 1\n                     }\n          ],\n          \"patient\": {\n                     \"reference\": \"#example-patient\"\n          },\n          \"managingOrganization\": {\n                     \"reference\": \"#example-organization\"\n          },\n          \"period\": {\n                     \"start\": \"2021-03-31T06:49:00.277Z\"\n          }\n}",
+      "sections": [
+        {
+          "id": "message-envelope",
+          "title": "Message envelope",
+          "subtitle": "EpisodeOfCare resource",
+          "fields": [
+            {
+              "field": "EpisodeOfCare",
+              "description": "Encapsulating field",
+              "type": "--",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "EpisodeOfCare.status",
+              "description": "ADT request message type",
+              "type": "code",
+              "req": "R*",
+              "notes": "Not required for JSON. See the message type reference table in section 6.2 of the PDF."
+            }
+          ]
+        },
+        {
+          "id": "organization--coverage",
+          "title": "Organization / Coverage",
+          "subtitle": "Organization, EpisodeOfCare, CareTeam",
+          "fields": [
+            {
+              "field": "Organization.id",
+              "description": "FHIR JSON resourceType container identifier",
+              "type": "id",
+              "req": "R*",
+              "notes": "Only required for FHIR JSON."
+            },
+            {
+              "field": "Organization.name",
+              "description": "Name of the hospice/branch",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Organization.identifier",
+              "description": "Hospice ID assigned by Dragonfly Health",
+              "type": "Identifier",
+              "req": "R",
+              "notes": "NOTE: map to the value element & set system to the URI for identifier (specifying DFH org id)"
+            },
+            {
+              "field": "EpisodeOfCare.type",
+              "description": "Hospice location / care setting type: Home | ALF | LTC | IPU",
+              "type": "CodeableConcept",
+              "req": "R",
+              "notes": "NOTE: map to the coding.code element & set coding.system to the URI to specify the care setting type"
+            },
+            {
+              "field": "CareTeam.id",
+              "description": "FHIR JSON resourceType container identifier",
+              "type": "id",
+              "req": "R*",
+              "notes": "Only required for FHIR JSON."
+            },
+            {
+              "field": "CareTeam.name",
+              "description": "Hospice team name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "CareTeam.period.start",
+              "description": "Location effective date - this is used as the transfer date",
+              "type": "dateTime",
+              "req": "R",
+              "notes": "Dragonfly Health utilizes a date-based billing cycle rather than time-specific increments."
+            },
+            {
+              "field": "EpisodeOfCare.period.start",
+              "description": "Patient coverage start date",
+              "type": "dateTime",
+              "req": "R",
+              "notes": "Expected to remain static for the duration of the patient episode (admit to discharge). Date-based billing cycle."
+            },
+            {
+              "field": "EpisodeOfCare.period.end",
+              "description": "Patient coverage stop date",
+              "type": "dateTime",
+              "req": "R*",
+              "notes": "Only required in a discharge message. Date-based billing cycle."
+            },
+            {
+              "field": "Patient.deceasedBoolean",
+              "description": "Patient deceased indicator: TRUE = deceased, FALSE = live discharge",
+              "type": "boolean",
+              "req": "R*",
+              "notes": "Only required in a discharge message."
+            }
+          ]
+        },
+        {
+          "id": "patient",
+          "title": "Patient",
+          "subtitle": "Patient resource",
+          "fields": [
+            {
+              "field": "Patient.id",
+              "description": "FHIR JSON resourceType container identifier",
+              "type": "id",
+              "req": "R*",
+              "notes": "Only required for FHIR JSON."
+            },
+            {
+              "field": "Patient.identifier",
+              "description": "Patient MRN",
+              "type": "Identifier",
+              "req": "R",
+              "notes": "NOTE: map to the value element & set system to the URI for identifier (specifying 'MRN')"
+            },
+            {
+              "field": "Patient.identifier",
+              "description": "Patient SSN",
+              "type": "Identifier",
+              "req": "O",
+              "notes": "NOTE: map to the value element & set system to the URI for identifier (specifying 'SSN')"
+            },
+            {
+              "field": "Patient.name.family",
+              "description": "Patient last name",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Patient.name.given[0]",
+              "description": "Patient first name",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Patient.name.given[1]",
+              "description": "Patient middle name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Patient.address.line[0]",
+              "description": "Street address of the patient",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Patient.address.line[1]",
+              "description": "Second line of the street address of the patient",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Patient.address.city",
+              "description": "Patient city",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Patient.address.state",
+              "description": "Patient state",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Patient.address.postalCode",
+              "description": "Patient zip code",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Patient.telecom",
+              "description": "Patient home phone number",
+              "type": "ContactPoint",
+              "req": "R",
+              "notes": "Must NOT contain parenthesis, spaces or dashes (e.g. 1112223333). If no phone number is received Dragonfly Health will use the hospice phone number. NOTE: map to the value element, set system to 'phone' & use to 'home'"
+            },
+            {
+              "field": "Patient.birthDate",
+              "description": "Patient date of birth",
+              "type": "date (YYYYMMDD)",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Patient.gender",
+              "description": "Patient gender: M = male, F = female, U = unknown | other",
+              "type": "string",
+              "req": "R",
+              "notes": "FHIR JSON requires the full word, all lowercase."
+            },
+            {
+              "field": "Patient.active",
+              "description": "Indicates whether this patient's record is in active use",
+              "type": "boolean",
+              "req": "R*",
+              "notes": "Only required for FHIR JSON."
+            }
+          ]
+        },
+        {
+          "id": "diagnoses-repeatable",
+          "title": "Diagnoses (repeatable)",
+          "subtitle": "Condition resource",
+          "fields": [
+            {
+              "field": "Condition.id",
+              "description": "FHIR JSON resourceType container identifier",
+              "type": "id",
+              "req": "R*",
+              "notes": "Only required for FHIR JSON."
+            },
+            {
+              "field": "Condition.code",
+              "description": "Diagnosis ICD10 code",
+              "type": "CodeableConcept",
+              "req": "P",
+              "notes": "Diagnoses are NOT required in any ADT message, but medications cannot be dispensed without an ICD10 present. NOTE: map to the coding.code element & set coding.system to the URI to specify the code type"
+            },
+            {
+              "field": "Condition.code",
+              "description": "Description of the diagnosis",
+              "type": "CodeableConcept",
+              "req": "O",
+              "notes": "NOTE: map to the coding.display element & set coding.system to the URI to specify the code type"
+            },
+            {
+              "field": "Condition.onsetDateTime",
+              "description": "Onset date of the diagnosis",
+              "type": "dateTime",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Condition.abatementDateTime",
+              "description": "Resolution date of the diagnosis",
+              "type": "dateTime",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "EpisodeOfCare.diagnosis.rank",
+              "description": "Primary diagnosis code indicator",
+              "type": "positiveInt",
+              "req": "R*",
+              "notes": "Required if an ICD10 is sent. If no primary indicator is sent for any diagnosis, Dragonfly Health defaults the first diagnosis in the message to primary. NOTE: mapped in the diagnosis.condition.reference section"
+            }
+          ]
+        },
+        {
+          "id": "allergies-repeatable",
+          "title": "Allergies (repeatable)",
+          "subtitle": "AllergyIntolerance resource",
+          "fields": [
+            {
+              "field": "AllergyIntolerance.code",
+              "description": "Code that identifies the allergy or intolerance",
+              "type": "CodeableConcept",
+              "req": "O",
+              "notes": "If no allergies are sent the entire container can be omitted. Allergies are NOT required in any ADT message, but medications cannot be dispensed without an allergy or NKA present. NOTE: map to the coding.code element & set coding.system to the URI to specify the code type"
+            },
+            {
+              "field": "AllergyIntolerance.code",
+              "description": "Allergy name",
+              "type": "CodeableConcept",
+              "req": "O",
+              "notes": "NOTE: map to the text element"
+            },
+            {
+              "field": "AllergyIntolerance.category",
+              "description": "Allergy category: Food | Medication | Environment | Biologic",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "AllergyIntolerance.onsetDateTime",
+              "description": "When the allergy or intolerance was identified",
+              "type": "dateTime",
+              "req": "O",
+              "notes": ""
+            }
+          ]
+        },
+        {
+          "id": "primary-doctor",
+          "title": "Primary doctor",
+          "subtitle": "Practitioner resource",
+          "fields": [
+            {
+              "field": "Practitioner.name.family",
+              "description": "Last name of the primary doctor",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Practitioner.name.given[0]",
+              "description": "First name of the primary doctor",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Practitioner.identifier",
+              "description": "DEA number of the primary doctor",
+              "type": "Identifier",
+              "req": "O",
+              "notes": "NOTE: map to the value element & set system to the URI for identifier (specifying 'DEA')"
+            },
+            {
+              "field": "Practitioner.identifier",
+              "description": "NPI license number code for the primary doctor",
+              "type": "Identifier",
+              "req": "R",
+              "notes": "NOTE: map to the value element & set system to the URI for identifier (specifying 'NPI')"
+            }
+          ]
+        },
+        {
+          "id": "facility-if-applicable",
+          "title": "Facility (if applicable)",
+          "subtitle": "Location resource",
+          "fields": [
+            {
+              "field": "Location.identifier",
+              "description": "EMR vendor internal LTC facility ID",
+              "type": "Identifier",
+              "req": "R*",
+              "notes": "Required for LTC/ALF pharmacy patients. NOTE: map to the value element & set system to the URI for identifier"
+            },
+            {
+              "field": "Location.name",
+              "description": "Name of the LTC facility",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Location.telecom",
+              "description": "Patient's LTC facility phone number",
+              "type": "ContactPoint",
+              "req": "O",
+              "notes": "NOTE: map to the value element, set system to 'phone' & use to 'work'"
+            },
+            {
+              "field": "Location.address.line[0]",
+              "description": "Patient's LTC facility address line 1",
+              "type": "string",
+              "req": "R*",
+              "notes": "Required for LTC/ALF pharmacy patients."
+            },
+            {
+              "field": "Location.address.line[1]",
+              "description": "Patient's LTC facility address line 2",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Location.address.city",
+              "description": "Patient's LTC facility city",
+              "type": "string",
+              "req": "R*",
+              "notes": "Required for LTC/ALF pharmacy patients."
+            },
+            {
+              "field": "Location.address.state",
+              "description": "Patient's LTC facility state",
+              "type": "string",
+              "req": "R*",
+              "notes": "Required for LTC/ALF pharmacy patients."
+            },
+            {
+              "field": "Location.address.postalCode",
+              "description": "Patient's LTC facility postal code",
+              "type": "string",
+              "req": "R*",
+              "notes": "Required for LTC/ALF pharmacy patients."
+            }
+          ]
+        },
+        {
+          "id": "next-of-kin--contacts-repeatable",
+          "title": "Next of kin / contacts (repeatable)",
+          "subtitle": "Patient.contact",
+          "fields": [
+            {
+              "field": "Patient.contact.name.family",
+              "description": "Next of kin last name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Patient.contact.name.given[0]",
+              "description": "Next of kin first name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Patient.contact.name.given[1]",
+              "description": "Next of kin middle name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Patient.contact.relationship",
+              "description": "Next of kin relationship",
+              "type": "CodeableConcept",
+              "req": "O",
+              "notes": "Preferred values: Caregiver, Child, Immediate Family, Parent, Spouse, Self, Other, Unknown. NOTE: map to the text element & set coding.system to the URI to specify the code type"
+            },
+            {
+              "field": "Patient.contact.address.line[0]",
+              "description": "Next of kin address line 1",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Patient.contact.address.line[1]",
+              "description": "Next of kin address line 2",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Patient.contact.address.city",
+              "description": "Next of kin city",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Patient.contact.address.state",
+              "description": "Next of kin state",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Patient.contact.address.postalCode",
+              "description": "Next of kin zip",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Patient.contact.telecom",
+              "description": "Next of kin phone",
+              "type": "ContactPoint",
+              "req": "O",
+              "notes": "NOTE: map to the value element, set system to 'phone' & use to 'home'"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

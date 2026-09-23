@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EHR Specification Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <div class="brand">
+      <img src="/assets/dfh_logo.png" alt="Organization logo" class="brand-logo">
+      <div>
+        <div class="eyebrow eyebrow-teal">Dragonfly Health</div>
+        <div class="brand-title">Specification Reference</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="wrap hero">
+  <div class="eyebrow eyebrow-deep">For Vendor Integration Partners</div>
+  <h1>Message Format<br><span>Specifications</span></h1>
+  <p class="hero-copy">
+    Select a message type and format below to explore payload examples, field-level
+    documentation, and jump directly to the sections you need.
+  </p>
+</section>
+
+<section id="downloads" class="wrap downloads">
+  <div class="dl-card">
+    <div>
+      <div class="dl-kicker">Specification document</div>
+      <div class="dl-title">ADT Messages &mdash; v1.9</div>
+      <div class="dl-sub">Patient demographics, allergies, diagnoses, insurance, and visit data</div>
+    </div>
+    <a class="dl-btn" href="/pdf/adt_spec_v7.1.pdf" download>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>PDF
+    </a>
+  </div>
+  <div class="dl-card">
+    <div>
+      <div class="dl-kicker">Specification document</div>
+      <div class="dl-title">Medication Messages &mdash; v2.4</div>
+      <div class="dl-sub">Active and discontinued medications with prescriber and pharmacy details</div>
+    </div>
+    <a class="dl-btn" href="/pdf/med_spec_v7.0.pdf" download>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>PDF
+    </a>
+  </div>
+</section>
+
+<section id="specs" class="wrap specs">
+  <div class="step">
+    <div class="step-label">Step 1 &mdash; Message Type</div>
+    <div class="btn-row">
+      <button type="button" class="type-btn" data-type="adt">ADT Messages</button>
+      <button type="button" class="type-btn" data-type="medications">Medication Messages</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-label">Step 2 &mdash; Format</div>
+    <div class="btn-row">
+      <button type="button" class="fmt-btn" data-format="hl7">HL7 v2.x</button>
+      <button type="button" class="fmt-btn" data-format="xml">XML</button>
+      <button type="button" class="fmt-btn" data-format="json">JSON</button>
+      <button type="button" class="fmt-btn" data-format="fhir">FHIR JSON</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <div class="panel-title">
+        <span class="format-badge" data-badge></span>
+        <span class="panel-name" data-panel-name></span>
+      </div>
+      <div class="tabs">
+        <button type="button" data-tab="payload">Example Payload</button>
+        <button type="button" data-tab="fields">Field Reference</button>
+      </div>
+    </div>
+
+    <div data-view-payload hidden>
+      <div class="payload-bar">
+        <span class="payload-meta mono" data-payload-meta></span>
+        <button type="button" class="copy-btn" data-copy>
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-7A1.5 1.5 0 0 0 1 3.5v7A1.5 1.5 0 0 0 2.5 12H4" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          <span data-copy-label>Copy</span>
+        </button>
+      </div>
+      <pre class="payload mono" data-payload></pre>
+    </div>
+
+    <div class="fields-view" data-view-fields hidden>
+      <nav class="jump" aria-label="Jump to section">
+        <div class="jump-label">Jump To</div>
+        <div data-jump></div>
+      </nav>
+      <div class="sections" data-sections></div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span><span class="pill pill-req">R</span> Required</span>
+    <span><span class="pill pill-opt">O</span> Optional</span>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <img src="/assets/dfh_logo.png" alt="" class="footer-logo">
+      <span>EHR Integration Specifications &middot; For authorized integration partners only</span>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/app.js"></script>
+</body>
+</html>

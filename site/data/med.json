@@ -1,0 +1,1017 @@
+{
+  "id": "medications",
+  "label": "Medication Messages",
+  "description": "Medication profile, update, discontinue and cancel messages: drug coding, dosage, directions, coverage and prescriber.",
+  "version": "7.0",
+  "pdf": "/pdf/med_spec_v7.0.pdf",
+  "payloadLabel": "RDE_O11 - Pharmacy Encoding",
+  "formats": {
+    "json": {
+      "payload": "{\n          \"patient\": {\n                     \"institution\": {\n                                \"id\": \"6935558\",\n                                \"name\": \"Example Institution\"\n                     },\n                     \"patient_id\": \"165901012\",\n                     \"patient_ssn\": \"122-11-1111\",\n                     \"last_name\": \"PatientLastName\",\n                     \"first_name\": \"PatientFirstName\",\n                     \"middle_name\": \"PatientMiddleName\",\n                     \"medication\": {\n                                \"request_type\": 1,\n                                \"id\": 49304022,\n                                \"rxnorm\": \"\",\n                                \"gcn\": 24635,\n                                \"ndc\": \"00378-9119-16\",\n                                \"med_name\": \"fentanyl 12 mcg/hr transdermal patch\",\n                                \"dosage_qty\": 1,\n                                \"dosage_unit\": \"patch\",\n                                \"formulation\": \"12\",\n                                \"directions\": \"Apply one patch TD q72hrs for pain\",\n                                \"method\": \"Apply\",\n                                \"is_prn\": true,\n                                \"start_date\": \"2026-04-29\",\n                                \"stop_date\": null,\n                                \"written_date\": \"2026-04-29\",\n                                \"route\": \"TD\",\n                                \"frequency\": \"q72hrs\",\n                                \"coverage\": \"covered\",\n                                \"indication\": \"Pain\",\n                                \"doctor\": {\n                                           \"last_name\": \"ProviderLastName\",\n                                           \"first_name\": \"ProviderFirstName\",\n                                           \"npi\": \"1164000371\",\n                                           \"dea\": \"12345\"\n                                }\n                     }\n          }\n}",
+      "sections": [
+        {
+          "id": "message-envelope",
+          "title": "Message envelope",
+          "subtitle": "patient object",
+          "fields": [
+            {
+              "field": "patient",
+              "description": "Encapsulating field",
+              "type": "--",
+              "req": "R",
+              "notes": ""
+            }
+          ]
+        },
+        {
+          "id": "organization",
+          "title": "Organization",
+          "subtitle": "institution object",
+          "fields": [
+            {
+              "field": "institution.name",
+              "description": "Name of the hospice/branch",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "institution.id",
+              "description": "Hospice ID assigned by Dragonfly Health",
+              "type": "integer",
+              "req": "R",
+              "notes": ""
+            }
+          ]
+        },
+        {
+          "id": "patient",
+          "title": "Patient",
+          "subtitle": "patient object",
+          "fields": [
+            {
+              "field": "patient_id",
+              "description": "Patient MRN",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "patient_ssn",
+              "description": "Patient SSN",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "last_name",
+              "description": "Patient's last name",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "first_name",
+              "description": "Patient's first name",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "middle_name",
+              "description": "Patient middle name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            }
+          ]
+        },
+        {
+          "id": "medication",
+          "title": "Medication",
+          "subtitle": "medication object",
+          "fields": [
+            {
+              "field": "medication.request_type",
+              "description": "Type of medication action: 1 = Active (medication profile action), 2 = Update (coverage changes, covered vs non-covered, or NPI changes), 3 = Discontinue, 4 = Cancel (treated as a discontinue)",
+              "type": "integer",
+              "req": "",
+              "notes": "The Required column is blank for this field in the PDF."
+            },
+            {
+              "field": "medication.id",
+              "description": "The vendor assigned order identifier for the medication",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "medication.rxnorm",
+              "description": "RxNorm for the medication",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "medication.gcn",
+              "description": "GCN for the medication",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "medication.ndc",
+              "description": "NDC for the medication",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "medication.med_name",
+              "description": "Name of the medication",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "medication.dosage_qty",
+              "description": "Units per dose for the medication (e.g. \"3\" 50 mg tablets)",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "medication.dosage_unit",
+              "description": "Dose unit of measure for the medication",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "medication.directions",
+              "description": "The directions for taking the medication",
+              "type": "string",
+              "req": "R",
+              "notes": "All SIG components should be concatenated into the text field, with any additional free-text instructions appended. SIG concatenation order: Verb, Dose Quantity, Med Name, Route, Frequency, Indication, Additional Inst."
+            },
+            {
+              "field": "medication.method",
+              "description": "Method of taking/administering the medication",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "medication.is_prn",
+              "description": "Medication PRN indicator",
+              "type": "boolean",
+              "req": "R",
+              "notes": "If the med directions contain the verbiage \"PRN\" or \"as needed\", Dragonfly Health will default this flag to true."
+            },
+            {
+              "field": "medication.start_date",
+              "description": "Date the medication is to be / was started",
+              "type": "dateTime",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "medication.stop_date",
+              "description": "Date the medication is to be / was stopped",
+              "type": "dateTime",
+              "req": "R*",
+              "notes": "Required if the medication status is stopped, or the medication action is DC or Cancel."
+            },
+            {
+              "field": "medication.route",
+              "description": "Route of the medication",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "medication.frequency",
+              "description": "Frequency of the medication",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "medication.written_date",
+              "description": "Date the provider wrote the prescription",
+              "type": "dateTime",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "medication.coverage",
+              "description": "Coverage indicator for the medication: Covered (1) | Not Covered (0) | Not Specified",
+              "type": "string",
+              "req": "R",
+              "notes": "If the coverage segment is missing completely, Dragonfly Health will default the medication to Not Specified coverage."
+            },
+            {
+              "field": "medication.indication",
+              "description": "Indication / reason for taking the medication",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            }
+          ]
+        },
+        {
+          "id": "doctor",
+          "title": "Doctor",
+          "subtitle": "doctor object",
+          "fields": [
+            {
+              "field": "doctor.last_name",
+              "description": "Last name of the prescribing doctor",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "doctor.first_name",
+              "description": "First name of the prescribing doctor",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "doctor.dea",
+              "description": "DEA number of the prescribing doctor",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "doctor.npi",
+              "description": "NPI license number code for the practicing physician",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            }
+          ]
+        }
+      ]
+    },
+    "xml": {
+      "payload": "<MedicationRequest>\n          <Patient>\n                     <PatSSN>123456789</PatSSN>\n                     <PatID>123456</PatID>\n                     <PatLastName>PatientLastName</PatLastName>\n                     <PatFirstName>PatientFirstName</PatFirstName>\n                     <PatMiddleName/>\n                     <PatBirthDate>04/21/1931</PatBirthDate>\n          </Patient>\n          <Hospice>\n                     <HospName>Example Hospice</HospName>\n                     <HospGroupID/>\n                     <HospLocType>Home</HospLocType>\n                     <HospTeamName>TeamA</HospTeamName>\n                     <HospLocEffDate>03/24/2026</HospLocEffDate>\n          </Hospice>\n          <Medication>\n                     <ExternalMedId>2341576</ExternalMedId>\n                     <MedRequestType>1</MedRequestType>\n                     <MedNDC>00009005501</MedNDC>\n                     <MedGPI>49270060000620</MedGPI>\n                     <MedName>Xanax 0.5 mg oral tablet</MedName>\n                     <MedIndication>Anxiety</MedIndication>\n                     <MedStrength>0.5</MedStrength>\n                     <MedForm>Tablet</MedForm>\n                     <MedRoute>ORAL</MedRoute>\n                     <MedMethod>Swallow</MedMethod>\n                     <AdditionalInstructions/>\n                     <StartDate>04/20/2026</StartDate>\n                     <StopDate/>\n                     <Coverage>1</Coverage>\n                     <UnitsPerDose>1</UnitsPerDose>\n                     <DoseUnits>mg</DoseUnits>\n                     <Route>PO</Route>\n                     <DoseFrequency>1xDaily</DoseFrequency>\n                     <PRN>false</PRN>\n                     <UsageDirections>1 Capsule 1 times a day ORAL (20 mg Capsule)\n</UsageDirections>\n                     <ApprovingDoctor>\n                                <DrLastName>PhysicianLastName</DrLastName>\n                                <DrFirstName>PhysicianFirstName</DrFirstName>\n                                <DrDEA/>\n                                <DrNPI>1952384505</DrNPI>\n                                <DrUPIN/>\n                                <DrOfficePhone>9378857163</DrOfficePhone>\n                                <DrOfficeFax>9375670670</DrOfficeFax>\n                     </ApprovingDoctor>\n          </Medication>\n</MedicationRequest>",
+      "sections": [
+        {
+          "id": "message-envelope",
+          "title": "Message envelope",
+          "subtitle": "<MedicationRequest>",
+          "fields": [
+            {
+              "field": "MedicationRequest",
+              "description": "Encapsulating field",
+              "type": "--",
+              "req": "R",
+              "notes": ""
+            }
+          ]
+        },
+        {
+          "id": "organization",
+          "title": "Organization",
+          "subtitle": "<Hospice>",
+          "fields": [
+            {
+              "field": "Hospice/HospiceName",
+              "description": "Name of the hospice/branch",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Hospice/HospOrgCode",
+              "description": "Hospice ID assigned by Dragonfly Health",
+              "type": "integer",
+              "req": "R",
+              "notes": ""
+            }
+          ]
+        },
+        {
+          "id": "patient",
+          "title": "Patient",
+          "subtitle": "<Patient>",
+          "fields": [
+            {
+              "field": "Patient/PatID",
+              "description": "Patient MRN",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Patient/PatSSN",
+              "description": "Patient SSN",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Patient/PatLastName",
+              "description": "Patient's last name",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "Patient/PatFirstName",
+              "description": "Patient's first name",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "Patient/PatMiddleName",
+              "description": "Patient middle name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            }
+          ]
+        },
+        {
+          "id": "medication",
+          "title": "Medication",
+          "subtitle": "<Medication>",
+          "fields": [
+            {
+              "field": "Medication/MedRequestType",
+              "description": "Type of medication action: 1 = Active (medication profile action), 2 = Update (coverage changes, covered vs non-covered, or NPI changes), 3 = Discontinue, 4 = Cancel (treated as a discontinue)",
+              "type": "integer",
+              "req": "",
+              "notes": "The Required column is blank for this field in the PDF."
+            },
+            {
+              "field": "Medication/ExternalMedID",
+              "description": "The vendor assigned order identifier for the medication",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Medication/MedRxNorm",
+              "description": "RxNorm for the medication",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Medication/MedGCN",
+              "description": "GCN for the medication",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Medication/MedNDC",
+              "description": "NDC for the medication",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Medication/MedName",
+              "description": "Name of the medication",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Medication/UnitsPerDose",
+              "description": "Units per dose for the medication (e.g. \"3\" 50 mg tablets)",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "Medication/DoseUnits",
+              "description": "Dose unit of measure for the medication",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "Medication/UsageDirections",
+              "description": "The directions for taking the medication",
+              "type": "string",
+              "req": "R",
+              "notes": "All SIG components should be concatenated into the text field, with any additional free-text instructions appended. SIG concatenation order: Verb, Dose Quantity, Med Name, Route, Frequency, Indication, Additional Inst."
+            },
+            {
+              "field": "Medication/MedMethod",
+              "description": "Method of taking/administering the medication",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Medication/PRN",
+              "description": "Medication PRN indicator",
+              "type": "string",
+              "req": "R",
+              "notes": "If the med directions contain the verbiage \"PRN\" or \"as needed\", Dragonfly Health will default this flag to true."
+            },
+            {
+              "field": "Medication/StartDate",
+              "description": "Date the medication is to be / was started",
+              "type": "dateTime",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Medication/StopDate",
+              "description": "Date the medication is to be / was stopped",
+              "type": "dateTime",
+              "req": "R*",
+              "notes": "Required if the medication status is stopped, or the medication action is DC or Cancel."
+            },
+            {
+              "field": "Medication/MedRoute",
+              "description": "Route of the medication",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "Medication/DoseFrequency",
+              "description": "Frequency of the medication",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "Medication/WrittenDate",
+              "description": "Date the provider wrote the prescription",
+              "type": "dateTime",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "Medication/Coverage",
+              "description": "Coverage indicator for the medication: Covered (1) | Not Covered (0) | Not Specified",
+              "type": "integer",
+              "req": "R",
+              "notes": "If the coverage segment is missing completely, Dragonfly Health will default the medication to Not Specified coverage."
+            },
+            {
+              "field": "Medication/MedIndication",
+              "description": "Indication / reason for taking the medication",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            }
+          ]
+        },
+        {
+          "id": "doctor",
+          "title": "Doctor",
+          "subtitle": "<ApprovingDoctor>",
+          "fields": [
+            {
+              "field": "ApprovingDoctor/DrLastName",
+              "description": "Last name of the prescribing doctor",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "ApprovingDoctor/DrFirstName",
+              "description": "First name of the prescribing doctor",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "ApprovingDoctor/DEA",
+              "description": "DEA number of the prescribing doctor",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "ApprovingDoctor/NPI",
+              "description": "NPI license number code for the practicing physician",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            }
+          ]
+        }
+      ]
+    },
+    "hl7": {
+      "payload": "MSH|^~\\&|SendingApplication|1234|DragonflyHealth|DragonflyHealth|||RDE^O11||P|2.5\nPID|||123456^MRN||PatientLastName^PatientFirstName||19520329|F|||512 Elmwood Ave^^Sharon Hill^PA^19079||(215)937-5500||||||364000111|||||||||||\nPV1||O|R^^^^^Home^^^|Home|||1374433555^JONES^TINA|1376633248^JONES^TINA||||||||||Home|||||||||||||||||||||Identifier|||||20260324||\nORC|*|17893|||N||^^^20260423000000||20210120154533||||||20201012000000||||||\nTQ1|1|1 tab|Every day All Days||||2026042300000|\nRXO|00009005501^Xanax 0.5 mg oral tablet^^223228|1 tab|1 tab|^10 mcg|^tablet|^1, Xanax 0.5 mg oral tablet, po, Daily AM, test,||||||||AR1230628||||10 mcg|^Xanax 0.5 mg oral tablet^10|1 tab|1, Xanax 0.5 mg oral tablet, po, Daily AM, test,\nRXR|oral\nNTE|1",
+      "sections": [
+        {
+          "id": "organization",
+          "title": "Organization",
+          "subtitle": "MSH, PV1",
+          "fields": [
+            {
+              "field": "PV1.3",
+              "description": "Name of the hospice/branch",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "MSH.4",
+              "description": "Hospice ID assigned by Dragonfly Health",
+              "type": "integer",
+              "req": "R",
+              "notes": ""
+            }
+          ]
+        },
+        {
+          "id": "patient",
+          "title": "Patient",
+          "subtitle": "PID segment",
+          "fields": [
+            {
+              "field": "PID.3.1",
+              "description": "Patient MRN",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "PID.19",
+              "description": "Patient SSN",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "PID.5.1",
+              "description": "Patient's last name",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "PID.5.2",
+              "description": "Patient's first name",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "PID.5.3",
+              "description": "Patient middle name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            }
+          ]
+        },
+        {
+          "id": "medication",
+          "title": "Medication",
+          "subtitle": "ORC, RXO, RXR",
+          "fields": [
+            {
+              "field": "ORC.1",
+              "description": "Type of medication action: 1 = Active (medication profile action), 2 = Update (coverage changes, covered vs non-covered, or NPI changes), 3 = Discontinue, 4 = Cancel (treated as a discontinue)",
+              "type": "string",
+              "req": "",
+              "notes": "The Required column is blank for this field in the PDF."
+            },
+            {
+              "field": "ORC.2",
+              "description": "The vendor assigned order identifier for the medication",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "RXO.1.10",
+              "description": "RxNorm for the medication",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "RXO.1.13",
+              "description": "GCN for the medication",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "RXO.1.1",
+              "description": "NDC for the medication",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "RXO.1.2",
+              "description": "Name of the medication",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "RXO.2",
+              "description": "Units per dose for the medication (e.g. \"3\" 50 mg tablets)",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "RXO.5.1",
+              "description": "Dose unit of measure for the medication",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "RXO.7.5",
+              "description": "The directions for taking the medication",
+              "type": "string",
+              "req": "R",
+              "notes": "All SIG components should be concatenated into the text field, with any additional free-text instructions appended. SIG concatenation order: Verb, Dose Quantity, Med Name, Route, Frequency, Indication, Additional Inst."
+            },
+            {
+              "field": "RXO.17",
+              "description": "Medication PRN indicator",
+              "type": "string",
+              "req": "R",
+              "notes": "If the med directions contain the verbiage \"PRN\" or \"as needed\", Dragonfly Health will default this flag to true."
+            },
+            {
+              "field": "ORC.7.4",
+              "description": "Date the medication is to be / was started",
+              "type": "dateTime",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "ORC.7.5",
+              "description": "Date the medication is to be / was stopped",
+              "type": "dateTime",
+              "req": "R*",
+              "notes": "Required if the medication status is stopped, or the medication action is DC or Cancel."
+            },
+            {
+              "field": "RXR.1.2",
+              "description": "Route of the medication",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "ORC.7.2",
+              "description": "Frequency of the medication",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "ORC.9",
+              "description": "Date the provider wrote the prescription",
+              "type": "dateTime",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "RXO.1.5",
+              "description": "Coverage indicator for the medication: Covered (1) | Not Covered (0) | Not Specified",
+              "type": "integer",
+              "req": "R",
+              "notes": "If the coverage segment is missing completely, Dragonfly Health will default the medication to Not Specified coverage."
+            },
+            {
+              "field": "RXO.20",
+              "description": "Indication / reason for taking the medication",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            }
+          ]
+        },
+        {
+          "id": "doctor",
+          "title": "Doctor",
+          "subtitle": "ORC.12",
+          "fields": [
+            {
+              "field": "ORC.12.2",
+              "description": "Last name of the prescribing doctor",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "ORC.12.3",
+              "description": "First name of the prescribing doctor",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "Second instance of ORC.12.1",
+              "description": "DEA number of the prescribing doctor",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "ORC.12.1",
+              "description": "NPI license number code for the practicing physician",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            }
+          ]
+        }
+      ]
+    },
+    "fhir": {
+      "payload": "{\n          \"resourceType\": \"MedicationRequest\",\n          \"contained\": [\n                     {\n                                \"resourceType\": \"Organization\",\n                                \"id\": \"example-organization\",\n                                \"identifier\": [\n                                           {\n                                                      \"system\":\n\"https://dragonflyhealth.com/identifier/organization-id\",\n                                                      \"value\": \"49414\"\n                                           }\n                                ],\n                                \"name\": \"Example Hospice Name\"\n                     },\n                     {\n                                \"resourceType\": \"Patient\",\n                                \"id\": \"example-patient\",\n                                \"identifier\": [\n                                           {\n                                                      \"system\": \"https://exampleVendor.com/identifier/mrn\",\n                                                      \"value\": \"629360331\"\n                                           },\n                                           {\n                                                      \"system\": \"http://hl7.org/fhir/sid/us-ssn\",\n                                                      \"value\": \"123456789\"\n                                           }\n                                ],\n                                \"name\": [\n                                           {\n                                                      \"use\": \"official\",\n                                                      \"family\": \"ExampleLastName\",\n                                                      \"given\": [\n                                                                 \"ExampleFirstName\",\n                                                                 \"ExampleMiddleName\"\n                                                      ]\n                                           }\n                                ]\n                     },\n                     {\n                                \"resourceType\": \"Practitioner\",\n                                \"id\": \"example-practitioner\",\n                                \"active\": true,\n                                \"identifier\": [\n                                           {\n                                                      \"system\": \"http://hl7.org/fhir/sid/us-npi\",\n                                                      \"value\": \"3235655611\"\n                                           },\n                                           {\n                                                      \"system\": \"http://hl7.org/fhir/sid/us-dea\",\n                                                      \"value\": \"123456\"\n                                           }\n                                ],\n                                \"name\": [\n                                           {\n                                                      \"use\": \"official\",\n                                                      \"family\": \"SampleMDLastName\",\n                                                      \"given\": [\n                                                                 \"SampleMDFirstName\"\n                                                      ]\n                                           }\n                                ]\n                     },\n                     {\n                                \"resourceType\": \"Medication\",\n                                \"id\": \"example-medication\",\n                                \"code\": {\n                                           \"coding\": [\n                                                      {\n                                                                 \"system\":\n\"https://www.accessdata.fda.gov/scripts/cder/ndc/index.cfm\",\n                                                                 \"code\": \"00113021771\",\n                                                                 \"display\": \"Tylenol 8 Hour 650 mg oral tablet, extended release\"\n                                                      }\n                                           ],\n                                           \"text\": \"Tylenol 8 Hour 650 mg oral tablet, extended release\"\n                                }\n                     },\n                     {\n                                \"resourceType\": \"Condition\",\n                                \"id\": \"example-condition\",\n                                \"clinicalStatus\": {\n                                           \"coding\": [\n                                                      {\n                                                                 \"system\":\n\"http://terminology.hl7.org/CodeSystem/condition-clinical\",\n                                                                 \"code\": \"active\"\n                                                      }\n                                           ]\n                                },\n                                \"code\": {\n                                           \"text\": \"test\"\n                                },\n                                \"subject\": {\n                                           \"reference\": \"#example-patient\"\n                                }\n                     },\n                     {\n                                \"resourceType\": \"Coverage\",\n                                \"id\": \"example-coverage-covered\",\n                                \"status\": \"active\",\n                                \"beneficiary\": {\n                                           \"reference\": \"#example-patient\"\n                                }\n                     }\n          ],\n          \"identifier\": [\n                     {\n                                \"system\": \"https://exampleVendor.com/medication/order_identifier\",\n                                \"value\": \"3b371f12\"\n                     }\n],\n\"status\": \"active\",\n\"intent\": \"order\",\n\"priority\": \"routine\",\n\"subject\": {\n          \"reference\": \"#example-patient\"\n},\n\"requester\": {\n          \"reference\": \"#example-practitioner\"\n},\n\"medicationReference\": {\n          \"reference\": \"#example-medication\"\n},\n\"insurance\": [\n          {\n                     \"reference\": \"#example-coverage-covered\"\n          }\n],\n\"authoredOn\": \"2021-02-24T00:15:00-06:00\",\n\"reasonReference\": [\n          {\n                     \"reference\": \"#example-condition\"\n          }\n],\n\"dosageInstruction\": [\n          {\n                     \"text\": \"1 tablet by mouth three times daily as needed\",\n                     \"timing\": {\n                                \"repeat\": {\n                                           \"frequency\": 3,\n                                           \"period\": 1,\n                                           \"periodUnit\": \"d\"\n                                }\n                     },\n                     \"asNeededBoolean\": true,\n                     \"route\": {\n                                \"coding\": [\n                                           {\n                                                      \"system\": \"http://snomed.info/sct\",\n                                                      \"code\": \"26643006\",\n                                                      \"display\": \"Oral route\"\n                                           }\n                                ],\n                                \"text\": \"PO\"\n                     },\n                     \"method\": {\n                                \"coding\": [\n                                           {\n                                                      \"system\": \"http://snomed.info/sct\",\n                                                      \"code\": \"421521009\",\n                                                      \"display\": \"Swallow\"\n                                           }\n                                ]\n                     },\n                     \"doseAndRate\": [\n                                {\n                                           \"doseQuantity\": {\n                                                      \"value\": 1,\n                                                      \"unit\": \"tablet\",\n                                                                 \"system\": \"http://unitsofmeasure.org\",\n                                                                 \"code\": \"{tbl}\"\n                                                      }\n                                           }\n                                ]\n                     }\n          ],\n          \"dispenseRequest\": {\n                     \"validityPeriod\": {\n                                \"start\": \"2021-04-02T15:53:04.205Z\"\n                     }\n          }\n}",
+      "sections": [
+        {
+          "id": "message-envelope",
+          "title": "Message envelope",
+          "subtitle": "MedicationRequest resource",
+          "fields": [
+            {
+              "field": "MedicationRequest",
+              "description": "Encapsulating field",
+              "type": "--",
+              "req": "R",
+              "notes": ""
+            }
+          ]
+        },
+        {
+          "id": "organization",
+          "title": "Organization",
+          "subtitle": "Organization resource",
+          "fields": [
+            {
+              "field": "Organization.id",
+              "description": "FHIR JSON resourceType container identifier",
+              "type": "id",
+              "req": "R*",
+              "notes": "Only required for FHIR JSON."
+            },
+            {
+              "field": "Organization.name",
+              "description": "Name of the hospice/branch",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "Organization.identifier",
+              "description": "Hospice ID assigned by Dragonfly Health",
+              "type": "Identifier",
+              "req": "R",
+              "notes": "NOTE: map to the value element & set system to the URI for identifier (specifying DFH org id)"
+            }
+          ]
+        },
+        {
+          "id": "patient",
+          "title": "Patient",
+          "subtitle": "Patient resource",
+          "fields": [
+            {
+              "field": "Patient.id",
+              "description": "FHIR JSON resourceType container identifier",
+              "type": "id",
+              "req": "R*",
+              "notes": "Only required for FHIR JSON."
+            },
+            {
+              "field": "Patient.identifier",
+              "description": "Patient MRN",
+              "type": "Identifier",
+              "req": "R",
+              "notes": "NOTE: map to the value element & set system to the URI for identifier (specifying 'MRN')"
+            },
+            {
+              "field": "Patient.identifier",
+              "description": "Patient SSN",
+              "type": "Identifier",
+              "req": "O",
+              "notes": "NOTE: map to the value element & set system to the URI for identifier (specifying 'SSN')"
+            },
+            {
+              "field": "Patient.name.family",
+              "description": "Patient's last name",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "Patient.name.given[0]",
+              "description": "Patient's first name",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "Patient.name.given[1]",
+              "description": "Patient middle name",
+              "type": "string",
+              "req": "O",
+              "notes": ""
+            }
+          ]
+        },
+        {
+          "id": "medication",
+          "title": "Medication",
+          "subtitle": "MedicationRequest resource",
+          "fields": [
+            {
+              "field": "MedicationRequest.status",
+              "description": "Type of medication action: 1 = Active (medication profile action), 2 = Update (coverage changes, covered vs non-covered, or NPI changes), 3 = Discontinue, 4 = Cancel (treated as a discontinue)",
+              "type": "string",
+              "req": "",
+              "notes": "The Required column is blank for this field in the PDF. NOTE: accepts 'active' for Add/Update or 'inactive' for Discontinue/Cancel"
+            },
+            {
+              "field": "MedicationRequest.identifier",
+              "description": "The vendor assigned order identifier for the medication",
+              "type": "Identifier",
+              "req": "R",
+              "notes": "NOTE: map to the value element & set system to the URI for identifier (specifying med id)"
+            },
+            {
+              "field": "Medication.id",
+              "description": "FHIR JSON resourceType container identifier",
+              "type": "id",
+              "req": "R*",
+              "notes": "Only required for FHIR JSON."
+            },
+            {
+              "field": "Medication.code",
+              "description": "RxNorm for the medication",
+              "type": "CodeableConcept",
+              "req": "O",
+              "notes": "NOTE: map to the coding.code element & set coding.system to the URI to specify the code type (rxNorm)"
+            },
+            {
+              "field": "Medication.code",
+              "description": "GCN for the medication",
+              "type": "CodeableConcept",
+              "req": "O",
+              "notes": "NOTE: map to the coding.code element & set coding.system to the URI to specify the code (gcn)"
+            },
+            {
+              "field": "Medication.code",
+              "description": "NDC for the medication",
+              "type": "CodeableConcept",
+              "req": "R",
+              "notes": "NOTE: map to the coding.code element & set coding.system to the URI to specify the code (ndc)"
+            },
+            {
+              "field": "Medication.text",
+              "description": "Name of the medication",
+              "type": "string",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "dosageInstruction.doseAndRate.doseQuantity",
+              "description": "Units per dose for the medication (e.g. \"3\" 50 mg tablets)",
+              "type": "Quantity",
+              "req": "P",
+              "notes": "NOTE: map to the value element"
+            },
+            {
+              "field": "dosageInstruction.doseAndRate.doseQuantity",
+              "description": "Dose unit of measure for the medication",
+              "type": "Quantity",
+              "req": "P",
+              "notes": "NOTE: map to the unit element"
+            },
+            {
+              "field": "dosageInstruction.text",
+              "description": "The directions for taking the medication",
+              "type": "string",
+              "req": "R",
+              "notes": "All SIG components should be concatenated into the text field, with any additional free-text instructions appended. SIG concatenation order: Verb, Dose Quantity, Med Name, Route, Frequency, Indication, Additional Inst."
+            },
+            {
+              "field": "dosageInstruction.method",
+              "description": "Method of taking/administering the medication",
+              "type": "CodeableConcept",
+              "req": "O",
+              "notes": "NOTE: map to the text element & set coding.system to the URI to specify the method code type"
+            },
+            {
+              "field": "dosageInstruction.asNeededBoolean",
+              "description": "Medication PRN indicator",
+              "type": "boolean",
+              "req": "R",
+              "notes": "If the med directions contain the verbiage \"PRN\" or \"as needed\", Dragonfly Health will default this flag to true."
+            },
+            {
+              "field": "dosageInstruction.timing.boundsPeriod.start",
+              "description": "Date the medication is to be / was started",
+              "type": "dateTime",
+              "req": "R",
+              "notes": ""
+            },
+            {
+              "field": "dosageInstruction.timing.boundsPeriod.end",
+              "description": "Date the medication is to be / was stopped",
+              "type": "dateTime",
+              "req": "R*",
+              "notes": "Required if the medication status is stopped, or the medication action is DC or Cancel."
+            },
+            {
+              "field": "dosageInstruction.route",
+              "description": "Route of the medication",
+              "type": "CodeableConcept",
+              "req": "P",
+              "notes": "NOTE: map to the text element & set coding.system to the URI to specify the method code type"
+            },
+            {
+              "field": "dosageInstruction.timing.repeat + period + periodUnit",
+              "description": "Frequency of the medication",
+              "type": "Timing",
+              "req": "P",
+              "notes": "NOTE: map to frequency + period + periodUnit"
+            },
+            {
+              "field": "MedicationRequest.authoredOn",
+              "description": "Date the provider wrote the prescription",
+              "type": "dateTime",
+              "req": "O",
+              "notes": ""
+            },
+            {
+              "field": "insurance",
+              "description": "Coverage indicator for the medication: Covered (1) | Not Covered (0) | Not Specified",
+              "type": "Reference (Coverage)",
+              "req": "R",
+              "notes": "If the coverage segment is missing completely, Dragonfly Health will default the medication to Not Specified coverage. NOTE: build a Coverage resourceType and reference it within the insurance element"
+            },
+            {
+              "field": "reasonReference",
+              "description": "Indication / reason for taking the medication",
+              "type": "Reference (Condition)",
+              "req": "P",
+              "notes": "NOTE: build a Condition resourceType and reference it within the reasonReference element"
+            }
+          ]
+        },
+        {
+          "id": "doctor",
+          "title": "Doctor",
+          "subtitle": "Practitioner resource",
+          "fields": [
+            {
+              "field": "Practitioner.id",
+              "description": "FHIR JSON resourceType container identifier",
+              "type": "id",
+              "req": "R*",
+              "notes": "Only required for FHIR JSON."
+            },
+            {
+              "field": "Practitioner.name.family",
+              "description": "Last name of the prescribing doctor",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "Practitioner.name.given[0]",
+              "description": "First name of the prescribing doctor",
+              "type": "string",
+              "req": "P",
+              "notes": ""
+            },
+            {
+              "field": "Practitioner.identifier",
+              "description": "DEA number of the prescribing doctor",
+              "type": "Identifier",
+              "req": "O",
+              "notes": "NOTE: map to the value element & set system to the URI for identifier (specifying 'DEA')"
+            },
+            {
+              "field": "Practitioner.identifier",
+              "description": "NPI license number code for the practicing physician",
+              "type": "Identifier",
+              "req": "P",
+              "notes": "NOTE: map to the value element & set system to the URI for identifier (specifying 'NPI')"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
