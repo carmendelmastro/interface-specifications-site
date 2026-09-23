@@ -20,15 +20,20 @@
         <div class="brand-title">Specification Reference</div>
       </div>
     </div>
+    <nav class="site-nav" aria-label="Site sections">
+      <button type="button" class="nav-link" data-page="format" aria-pressed="true">Message Format</button>
+      <button type="button" class="nav-link" data-page="connection" aria-pressed="false">Connection Guide</button>
+    </nav>
   </div>
 </header>
+
+<div data-page-panel="format">
 
 <section class="wrap hero">
   <div class="eyebrow eyebrow-deep">For Vendor Integration Partners</div>
   <h1>Message Format<br><span>Specifications</span></h1>
   <p class="hero-copy">
-    Select a message type and format below to explore payload examples, field-level
-    documentation, and jump directly to the sections you need.
+    Select a message type and format below to explore payload examples and documentation. JSON is our preferred format for interfaces.
   </p>
 </section>
 
@@ -125,12 +130,116 @@
   </div>
 </section>
 
+</div>
+
+<div data-page-panel="connection" hidden>
+
+<section class="wrap hero">
+  <div class="eyebrow eyebrow-deep">For Vendor Integration Partners</div>
+  <h1>Connection &amp;<br><span>Security Protocol</span></h1>
+  <p class="hero-copy">
+    Dragonfly Health employs multiple layers of security &mdash; including TLS encryption,
+    authenticated API access, Imperva application protection, network firewall controls,
+    load balancing, and application-level validation &mdash; to support secure and reliable
+    interface communications.
+  </p>
+</section>
+
+<section class="wrap connection">
+  <div class="protocol-box">
+    <div class="protocol-head">
+      <div class="protocol-title">Connection / Security Protocol</div>
+      <div class="protocol-sub mono">HTTP POST &middot; TLS 1.2 &middot; Basic Authentication</div>
+    </div>
+
+    <div class="security-diagram">
+      <div class="security-step">
+        <img src="/assets/medical-record.png" alt="EMR icon" class="security-icon">
+        <div class="security-label">EMR</div>
+      </div>
+
+      <span class="diagram-arrow" aria-hidden="true">&rarr;</span>
+
+      <div class="security-step">
+        <img src="/assets/defence.png" alt="Imperva icon" class="security-icon">
+        <div class="security-label">Imperva</div>
+      </div>
+
+      <span class="diagram-arrow" aria-hidden="true">&rarr;</span>
+
+      <div class="security-step">
+        <img src="/assets/firewall.png" alt="Firewall icon" class="security-icon">
+        <div class="security-label">Firewall Layer</div>
+      </div>
+
+      <span class="diagram-arrow" aria-hidden="true">&rarr;</span>
+
+      <div class="security-step">
+        <img src="/assets/load-balancing.png" alt="Load balancer icon" class="security-icon">
+        <div class="security-label">F5 Load Balancer</div>
+      </div>
+
+      <span class="diagram-arrow" aria-hidden="true">&rarr;</span>
+
+      <div class="security-step">
+        <div class="security-icon security-icon-placeholder" aria-label="Photo placeholder" title="Photo coming soon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M21 15l-5-5-4 4-3-3-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="security-label">Single Interface Gateway (SIG)</div>
+      </div>
+    </div>
+
+    <div class="protocol-groups">
+      <div class="protocol-group">
+        <div class="protocol-group-title">Communication Method</div>
+        <ul>
+          <li>HTTPS POST, TLS 1.2 or higher</li>
+          <li>Data encrypted in transit, EMR to Dragonfly Health</li>
+        </ul>
+      </div>
+      <div class="protocol-group">
+        <div class="protocol-group-title">Authentication</div>
+        <ul>
+          <li>Basic Authentication (username &amp; password)</li>
+          <li>Unique credentials and URL per environment (test/prod)</li>
+          <li>Every transaction validated before processing</li>
+        </ul>
+      </div>
+      <div class="protocol-group">
+        <div class="protocol-group-title">Security Controls</div>
+        <ul>
+          <li>Imperva WAAP inspects all inbound traffic</li>
+          <li>Network firewall &amp; load-balanced delivery</li>
+        </ul>
+      </div>
+      <div class="protocol-group">
+        <div class="protocol-group-title">Additional Security Options</div>
+        <ul>
+          <li>Client certificate auth available on request</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+
 <footer class="site-footer">
   <div class="wrap footer-inner">
     <div class="footer-brand">
       <img src="/assets/dfh_logo.png" alt="" class="footer-logo">
       <span>EHR Integration Specifications &middot; For authorized integration partners only</span>
     </div>
+  </div>
+  <div class="wrap footer-attribution" data-page-panel="connection" hidden>
+    <a href="https://www.flaticon.com/free-icons/shield" title="shield icons">Shield icons created by Hilmy Abiyyu A. - Flaticon</a>
+    <a href="https://www.flaticon.com/free-icons/medical-record" title="medical record icons">Medical record icons created by Magnific - Flaticon</a>
+    <a href="https://www.flaticon.com/free-icons/firewall" title="firewall icons">Firewall icons created by Vitaly Gorbachev - Flaticon</a>
+    <a href="https://www.flaticon.com/free-icons/load-balancer" title="load balancer icons">Load balancer icons created by Flat Icons - Flaticon</a>
   </div>
 </footer>
 

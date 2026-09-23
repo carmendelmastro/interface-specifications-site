@@ -15,6 +15,31 @@ const $$ = (sel) => document.querySelectorAll(sel);
 const esc = (s) =>
   String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
+initPageTabs();
+
+// Header page tabs: Message Format vs Connection Guide. Kept independent of
+// the spec-loading below so switching pages still works if that fetch fails.
+function initPageTabs() {
+  const buttons = $$("[data-page]");
+
+  function show(page) {
+    for (const b of buttons) b.setAttribute("aria-pressed", b.dataset.page === page);
+    for (const panel of $$("[data-page-panel]")) panel.hidden = panel.dataset.pagePanel !== page;
+  }
+
+  for (const b of buttons) {
+    b.addEventListener("click", () => {
+      show(b.dataset.page);
+      const q = new URLSearchParams(location.search);
+      q.set("page", b.dataset.page);
+      history.replaceState(null, "", `?${q}${location.hash}`);
+    });
+  }
+
+  const initial = new URLSearchParams(location.search).get("page") === "connection" ? "connection" : "format";
+  show(initial);
+}
+
 Promise.all([
   fetch("/data/adt.json").then((r) => r.json()),
   fetch("/data/med.json").then((r) => r.json()),
