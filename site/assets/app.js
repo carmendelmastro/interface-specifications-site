@@ -100,11 +100,17 @@ function renderFields(sections) {
   $("[data-sections]").innerHTML = sections.map(sectionHtml).join("");
 
   for (const b of $$("[data-goto]")) {
-    b.addEventListener("click", () => {
-      document.getElementById(`sec-${b.dataset.goto}`)
-        ?.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
+    b.addEventListener("click", () => jumpTo(b.dataset.goto));
   }
+}
+
+function jumpTo(id) {
+  const box = $("[data-sections]");
+  const target = document.getElementById(`sec-${id}`);
+  if (!target) return;
+  const top =
+    box.scrollTop + target.getBoundingClientRect().top - box.getBoundingClientRect().top;
+  box.scrollTo({ top: top, behavior: "smooth" });
 }
 
 function sectionHtml(s) {
