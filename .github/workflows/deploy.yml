@@ -25,4 +25,4 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync . s3://interface-specifications-site-535387297859-us-east-2-an --delete
+          aws s3 sync ./site s3://interface-specifications-site-535387297859-us-east-2-an --delete
